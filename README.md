@@ -64,7 +64,7 @@ behavior.
 Aliases can be powerful. The ```Alias``` type support reusing aliases.
 ```CSharp
 Alias tblAlias = "c";
-var select = c + "[FullName]"; // c.[FullName]
+var select = tblAlias + "[FullName]"; // c.[FullName]
 ```
 
 ### JOIN statements

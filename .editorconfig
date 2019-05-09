@@ -1,0 +1,14 @@
+root = true
+[*]
+end_of_line=crlf
+insert_final_newline = true
+
+# XML based data files
+[*.{config,csproj,props,ruleset}]
+indent_style = space
+indent_size = 2
+
+# C#, VB.NET, Gherkin feature 
+[*.{cs,vb,feature}]
+indent_style = space
+indent_size = 4

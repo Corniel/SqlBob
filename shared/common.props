@@ -1,0 +1,17 @@
+<Project>
+
+  <Import Project="common.analytics.props" />
+
+  <PropertyGroup>
+    <Authors>Corniel Nobel</Authors>
+    <Owners>Corniel Nobel</Owners>
+    <Copyright>Copyright © 2018 Corniel Nobel</Copyright>
+    <Description>
+      SQL Bob is a lightweight library that allows developers to build SQL queries
+      dynamically. It offers a fluent API which allows to define a SQL query as a
+      nested structure. It is NOT an ORM.
+    </Description>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+</Project>

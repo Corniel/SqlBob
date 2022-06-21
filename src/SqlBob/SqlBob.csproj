@@ -7,6 +7,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.1</Version>
+    <DefineConstants>CONTRACTS_FULL</DefineConstants>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

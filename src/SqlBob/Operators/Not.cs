@@ -11,7 +11,7 @@ namespace SqlBob
         public override Keyword Operator => Keyword.NOT;
 
         /// <inheritdoc/>
-        public override void Write(SqlBuilder builder, int depth = 0)
+        public override void Write(SqlBuilder builder, int depth)
         {
             Guard.NotNull(builder, nameof(builder));
 

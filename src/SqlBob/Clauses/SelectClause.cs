@@ -8,7 +8,7 @@ public class SelectClause : SqlClause<ISqlStatement>
         : base(ConvertAll(expressions)) { }
 
     /// <inherritdoc/>
-    public override void Write(SqlBuilder builder, int depth = 0)
+    public override void Write(SqlBuilder builder, int depth)
     {
         builder
              .Indent(depth)

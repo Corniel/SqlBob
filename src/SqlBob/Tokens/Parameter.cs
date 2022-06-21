@@ -1,38 +1,36 @@
-﻿using SqlBob.Formatting;
-
-namespace SqlBob;
+﻿namespace SqlBob;
 
 /// <summary>Represent a SQL keyword parameter.</summary>
 [DebuggerDisplay("{DebuggerDisplay}")]
-public struct Parameter : ISqlStatement, IEquatable<Parameter>
+public readonly struct Parameter : ISqlStatement, IEquatable<Parameter>
 {
     /// <summary>Creates a new instance of a <see cref="Parameter"/>.</summary>
     public Parameter(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
-            _value = null;
+            Value = null;
         }
         else
         {
-            _value = value[0] == '@'
+            Value = value[0] == '@'
                 ? value
                 : '@' + value;
         }
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly string _value;
+    private readonly string Value;
 
     /// <summary>Implicitly casts a <see cref="string"/> to a <see cref="Parameter"/>.</summary>
     public static implicit operator Parameter(string value) => new(value);
 
     /// <inherritdoc/>
-    public void Write(SqlBuilder builder, int depth = 0)
+    public void Write(SqlBuilder builder, int depth)
     {
         Guard.NotNull(builder, nameof(builder));
 
-        builder.Literal(_value);
+        builder.Literal(Value);
     }
 
     /// <summary>Represents the <see cref="Parameter"/> as <see cref="string"/>.</summary>
@@ -48,9 +46,9 @@ public struct Parameter : ISqlStatement, IEquatable<Parameter>
 
     /// <inherritdoc/>
     [Pure]
-    public bool Equals(Parameter other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+    public bool Equals(Parameter other) => string.Equals(Value, other.Value, StringComparison.InvariantCultureIgnoreCase);
 
     /// <inherritdoc/>
     [Pure]
-    public override int GetHashCode() => _value is null ? 0 : _value.ToUpperInvariant().GetHashCode();
+    public override int GetHashCode() => Value is null ? 0 : Value.ToUpperInvariant().GetHashCode();
 }

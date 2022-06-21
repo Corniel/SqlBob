@@ -1,7 +1,7 @@
 ﻿namespace SqlBob.Formatting;
 
 /// <summary>A <see cref="StringBuilder"/> based SQL (string) builder.</summary>
-public class SqlBuilder
+public sealed class SqlBuilder
 {
     internal static readonly SqlBuilderPool Pool = new();
 
@@ -11,19 +11,10 @@ public class SqlBuilder
     public SqlBuilder() : this(null) { }
 
     /// <summary>Creates a new instance of a <see cref="SqlBuilder"/>.</summary>
-    public SqlBuilder(SqlFormatInfo formatInfo) => FormatInfo = formatInfo;
+    public SqlBuilder(SqlFormatInfo formatInfo) => FormatInfo = formatInfo ?? SqlFormatInfo.Debugger;
 
     /// <summary>Gets and sets the format info.</summary>
-    /// <remarks>
-    /// To prevent <see cref="NullReferenceException"/>s,
-    /// it is not possible to assign this with null.
-    /// </remarks>
-    public SqlFormatInfo FormatInfo
-    {
-        get => Info;
-        set => Info = value ?? new SqlFormatInfo();
-    }
-    private SqlFormatInfo Info = new();
+    public SqlFormatInfo FormatInfo { get; internal set; }
 
     /// <summary>Writes a literal <see cref="string"/>.</summary>
     [FluentSyntax]
@@ -81,11 +72,11 @@ public class SqlBuilder
     [FluentSyntax]
     public SqlBuilder Indent(int depth)
     {
-        if (Info.UseNewLine)
+        if (FormatInfo.UseNewLine)
         {
             for (var i = 0; i < depth; i++)
             {
-                sb.Append(Info.Indent);
+                sb.Append(FormatInfo.Indent);
             }
         }
         return this;
@@ -106,7 +97,7 @@ public class SqlBuilder
     [FluentSyntax]
     public SqlBuilder NewLineOrSpace()
     {
-        if (Info.UseNewLine)
+        if (FormatInfo.UseNewLine)
         {
             sb.AppendLine();
         }
@@ -121,7 +112,7 @@ public class SqlBuilder
     [FluentSyntax]
     public SqlBuilder NewLine()
     {
-        if (Info.UseNewLine)
+        if (FormatInfo.UseNewLine)
         {
             sb.AppendLine();
         }

@@ -28,7 +28,7 @@ public static class SqlStatementExtensions
     public static string ToString(this ISqlStatement sqlStatement, SqlFormatInfo formatInfo)
     {
         var builder = SqlBuilder.Pool.Pop();
-        builder.FormatInfo = formatInfo;
+        builder.FormatInfo = formatInfo ?? SqlFormatInfo.Debugger;
         sqlStatement.Write(builder);
         var sql = builder.ToString();
         SqlBuilder.Pool.Push(builder);

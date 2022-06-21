@@ -4,20 +4,23 @@
 [DebuggerDisplay("{DebuggerDisplay}")]
 public readonly struct Literal : ISqlStatement
 {
-    /// <summary>Creates a new instance of a SQL <see cref="Literal"/>.</summary>
-    public Literal(string value) => _value = value;
+    /// <summary>A null/not set alias.</summary>
+    public static readonly Literal None;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly string _value;
+    private readonly string Value;
+
+    /// <summary>Creates a new instance of a SQL <see cref="Literal"/>.</summary>
+    private Literal(string value) => Value = value == string.Empty ? null : value;
 
     /// <summary>Implicitly casts a <see cref="string"/> to a <see cref="Literal"/>.</summary>
-    public static implicit operator Literal(string value) => new Literal(value);
+    public static implicit operator Literal(string value) => new(value);
 
     /// <inherritdoc/>
-    public void Write(SqlBuilder builder, int depth = 0)
+    public void Write(SqlBuilder builder, int depth)
     {
         Guard.NotNull(builder, nameof(builder));
-        builder.Indent(depth).Literal(_value);
+        builder.Indent(depth).Literal(Value);
     }
 
     /// <inherritdoc/>

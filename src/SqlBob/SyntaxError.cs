@@ -13,7 +13,7 @@ public class SyntaxError : SqlStatement
     public string Message { get; }
     
     /// <summary>Sets the <see cref="SqlBuilder.HasSyntaxError"/> to true with the message.</summary>
-    public override void Write(SqlBuilder builder, int depth = 0)
+    public override void Write(SqlBuilder builder, int depth)
     {
         Guard.NotNull(builder, nameof(builder));
 
@@ -27,11 +27,11 @@ public class SyntaxError : SqlStatement
     }
 
     /// <summary>The JOIN expression ON condition has not been specified.</summary>
-    public static SyntaxError JoinOnConditionNotSpecified => new SyntaxError(SqlBobMessages.SyntaxError_JoinOnConditionNotSpecified);
+    public static SyntaxError JoinOnConditionNotSpecified => new(SqlBobMessages.SyntaxError_JoinOnConditionNotSpecified);
 
     /// <summary>The FROM expression has not been specified.</summary>
-    public static SyntaxError FromExpressionNotSpecified => new SyntaxError(SqlBobMessages.SyntaxError_FromExpressionNotSpecified);
+    public static SyntaxError FromExpressionNotSpecified => new(SqlBobMessages.SyntaxError_FromExpressionNotSpecified);
 
     /// <summary>Tries to parenthesize an empty SQL statement.</summary>
-    public static SyntaxError ParenthesisIsEmpty => new SyntaxError(SqlBobMessages.SyntaxError_ParenthesisIsEmpty);
+    public static SyntaxError ParenthesisIsEmpty => new(SqlBobMessages.SyntaxError_ParenthesisIsEmpty);
 }

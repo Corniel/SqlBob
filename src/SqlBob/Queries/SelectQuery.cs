@@ -7,98 +7,101 @@ public class SelectQuery : SqlStatement
     public SelectClause SelectClause { get; internal init; }
 
     /// <summary>Gets the FROM clause.</summary>
-    public From FromClause { get; private set; } = new From(null);
+    public From FromClause { get; private init; } = new(null);
 
     /// <summary>Gets the JOIN clause.</summary>
-    public JoinClause JoinClause { get; private set; } = new JoinClause();
+    public JoinClause JoinClause { get; private init; } = new();
 
     /// <summary>Gets the WHERE clause.</summary>
-    public Where WhereClause { get; private set; } = SqlBob.Where.None;
+    public Where WhereClause { get; private init; } = SqlBob.Where.None;
 
     /// <summary>GETS the ORDER BY clause.</summary>
-    public OrderByClause OrderByClause { get; private set; } = new OrderByClause();
+    public OrderByClause OrderByClause { get; private init; } = new();
 
     /// <summary>GETS the GROUP BY clause.</summary>
-    public GroupByClause GroupByClause { get; private set; } = new GroupByClause();
+    public GroupByClause GroupByClause { get; private init; } = new();
 
     /// <summary>Extends the SELECT query with a FROM statement.</summary>
-    [Impure]
+    [Pure]
     public SelectQuery From(object expression)
-    {
-        FromClause = expression as From ?? new From(expression);
-        return this;
-    }
+        => new()
+        {
+            SelectClause = SelectClause,
+            FromClause = expression as From ?? new From(expression),
+            JoinClause = JoinClause,
+            WhereClause = WhereClause,
+            OrderByClause = OrderByClause,
+            GroupByClause = GroupByClause,
+        };
 
     /// <summary>Extends the SELECT query with a FROM statement.</summary>
-    [Impure]
+    [Pure]
     public SelectQuery From(object expression, Alias alias)
-    {
-        From(expression);
-        FromClause = FromClause.As(alias);
-        return this;
-    }
-
+         => new()
+         {
+             SelectClause = SelectClause,
+             FromClause = (expression as From ?? new From(expression)).As(alias),
+             JoinClause = JoinClause,
+             WhereClause = WhereClause,
+             OrderByClause = OrderByClause,
+             GroupByClause = GroupByClause,
+         };
+      
     /// <summary>Extends the SELECT query with JOIN statement(s).</summary>
-    [Impure]
+    [Pure]
     public SelectQuery Join(params object[] expressions)
-    {
-        JoinClause =
-        (
-            expressions != null &&
-            expressions.Length == 1 &&
-            expressions[0] is JoinClause clause
-        )
-            ? clause
-            : new JoinClause(expressions);
+         => new()
+         {
+             SelectClause = SelectClause,
+             FromClause = FromClause,
+             JoinClause = Single<JoinClause>(expressions) ?? new(expressions),
+             WhereClause = WhereClause,
+             OrderByClause = OrderByClause,
+             GroupByClause = GroupByClause,
+         };
 
-        return this;
-    }
 
     /// <summary>Extends the SELECT query with a WHERE statement.</summary>
-    [Impure]
+    [Pure]
     public SelectQuery Where(object expression)
-    {
-        WhereClause = expression as Where ?? new Where(expression);
-        return this;
-    }
+        => new()
+        {
+            SelectClause = SelectClause,
+            FromClause = FromClause,
+            JoinClause = JoinClause,
+            WhereClause = expression as Where ?? new Where(expression),
+            OrderByClause = OrderByClause,
+            GroupByClause = GroupByClause,
+        };
 
     /// <summary>Extends the SELECT query with a ORDER BY statement.</summary>
-    [Impure]
+    [Pure]
     public SelectQuery OrderBy(params object[] expressions)
-    {
-        OrderByClause =
-        (
-            expressions != null &&
-            expressions.Length == 1 &&
-            expressions[0] is OrderByClause clause
-        )
-            ? clause
-            : new OrderByClause(expressions);
-
-        return this;
-    }
+         => new()
+         {
+             SelectClause = SelectClause,
+             FromClause = FromClause,
+             JoinClause = JoinClause,
+             WhereClause = WhereClause,
+             OrderByClause = Single<OrderByClause>(expressions) ?? new(expressions),
+             GroupByClause = GroupByClause,
+         };
 
     /// <summary>Extends the SELECT query with a GROUP BY statement.</summary>
-    [Impure]
+    [Pure]
     public SelectQuery GroupBy(params object[] expressions)
-    {
-        GroupByClause =
-        (
-            expressions != null &&
-            expressions.Length == 1 &&
-            expressions[0] is GroupByClause clause
-        )
-            ? clause
-            : new GroupByClause(expressions);
-
-        return this;
-
-    }
-
-
+         => new()
+         {
+             SelectClause = SelectClause,
+             FromClause = FromClause,
+             JoinClause = JoinClause,
+             WhereClause = WhereClause,
+             OrderByClause = OrderByClause,
+             GroupByClause = Single<GroupByClause>(expressions) ?? new(expressions),
+         };
 
     /// <inherritdoc/>
-    public override void Write(SqlBuilder builder, int depth = 0)
+    public override void Write(SqlBuilder builder, int depth)
     {
         Guard.NotNull(builder, nameof(builder));
 
@@ -111,4 +114,10 @@ public class SelectQuery : SqlStatement
             .Write(OrderByClause).NewLineOrSpace()
         ;
     }
+
+    [Pure]
+    private static T Single<T>(object[] expressions) where T: class
+        => expressions?.Length == 1
+        ? expressions[0] as T
+        : default;
 }

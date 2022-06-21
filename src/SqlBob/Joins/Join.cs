@@ -20,7 +20,7 @@ public abstract class Join : SqlStatement
     public ISqlStatement Condition { get; internal protected set; } = SyntaxError.JoinOnConditionNotSpecified;
 
     /// <inherritdoc/>
-    public override void Write(SqlBuilder builder, int depth = 0)
+    public override void Write(SqlBuilder builder, int depth)
     {
         Guard.NotNull(builder, nameof(builder));
 

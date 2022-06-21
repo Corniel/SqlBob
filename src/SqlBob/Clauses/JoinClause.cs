@@ -10,7 +10,7 @@ namespace SqlBob
             : base(expressions) { }
 
         /// <inherritdoc/>
-        public override void Write(SqlBuilder builder, int depth = 0)
+        public override void Write(SqlBuilder builder, int depth)
         {
             foreach(var join in this)
             {

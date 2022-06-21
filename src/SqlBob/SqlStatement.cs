@@ -5,7 +5,7 @@
 public abstract class SqlStatement : ISqlStatement
 {
     /// <inheritdoc/>
-    public abstract void Write(SqlBuilder builder, int depth = 0);
+    public abstract void Write(SqlBuilder builder, int depth);
 
     /// <inheritdoc/>
     [Pure]

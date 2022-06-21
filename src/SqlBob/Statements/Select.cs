@@ -24,7 +24,7 @@ public class Select : SqlStatement
     }
 
     /// <inheritdoc />
-    public override void Write(SqlBuilder builder, int depth = 0)
+    public override void Write(SqlBuilder builder, int depth)
     {
         builder.Write(Expression);
         if (Alias.NotEmpty())

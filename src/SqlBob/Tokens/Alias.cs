@@ -4,26 +4,25 @@ namespace SqlBob;
 [DebuggerDisplay("{DebuggerDisplay}")]
 public readonly struct Alias : ISqlStatement
 {
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string Value;
+
     /// <summary>A null/not set alias.</summary>
     public static readonly Alias None;
 
     /// <summary>Creates a new instance of a SQL <see cref="Alias"/>.</summary>
-    public Alias(string value) => _value = value;
-
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly string _value;
+    private Alias(string value) => Value = value == string.Empty ? null : value;
 
     /// <summary>Adds an alias to a SQL literal.</summary>
     [Pure]
-    public Literal Add(Literal selector)
-    {
-        return NotEmpty()
-            ? _value + '.' + selector.ToString()
-            : selector;
-    }
+    public Literal Add(Literal selector) 
+        => NotEmpty()
+        ? Value + '.' + selector.ToString()
+        : selector;
 
     /// <summary>Adds an alias to a SQL literal.</summary>
     public static Literal operator +(Alias alias, Literal selector) => alias.Add(selector);
+    
     /// <summary>Adds an alias to a SQL literal.</summary>
     public static Literal operator +(Alias alias, string selector) => alias.Add(selector);
 
@@ -31,15 +30,12 @@ public readonly struct Alias : ISqlStatement
     public static implicit operator Alias(string value) => new(value);
 
     /// <inherritdoc/>
-    public void Write(SqlBuilder builder, int depth = 0)
-    {
-        Guard.NotNull(builder, nameof(builder));
-        builder.Literal(_value);
-    }
+    public void Write(SqlBuilder builder, int depth)
+        => Guard.NotNull(builder, nameof(builder)).Literal(Value);
 
     /// <summary>Has the alias been specified?</summary>
     [Pure]
-    public bool NotEmpty() => !string.IsNullOrEmpty(_value);
+    public bool NotEmpty() => !string.IsNullOrEmpty(Value);
 
     /// <inherritdoc/>
     [Pure]

@@ -15,7 +15,7 @@ namespace SqlBob
         public ISqlStatement Expression { get; }
 
         /// <inheritdoc />
-        public override void Write(SqlBuilder builder, int depth = 0)
+        public override void Write(SqlBuilder builder, int depth)
         {
             Guard.NotNull(builder, nameof(builder));
 

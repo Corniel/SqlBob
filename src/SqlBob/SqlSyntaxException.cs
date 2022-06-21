@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace SqlBob
+﻿namespace SqlBob
 {
     /// <summary>Represents a SQL Syntax exception.</summary>
     [Serializable]

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 15.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7BE3D533-C1A1-4E23-A747-332A9A32BEEE}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,11 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{770924E8-1E3C-439F-A948-CF3F3252ABDF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{BD81C7D6-C34E-4997-B6A9-FAA9723D39A1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{BD81C7D6-C34E-4997-B6A9-FAA9723D39A1}"
 	ProjectSection(SolutionItems) = preProject
-		shared\common.analytics.props = shared\common.analytics.props
-		shared\common.props = shared\common.props
-		shared\SqlBob.ruleset = shared\SqlBob.ruleset
+		props\common.props = props\common.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlBob.Tests", "test\SqlBob.Tests\SqlBob.Tests.csproj", "{D11C4900-9181-4D1C-AC34-D38397D7D5BA}"

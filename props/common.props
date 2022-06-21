@@ -1,7 +1,5 @@
 <Project>
 
-  <Import Project="common.analytics.props" />
-
   <PropertyGroup>
     <Authors>Corniel Nobel</Authors>
     <Owners>Corniel Nobel</Owners>

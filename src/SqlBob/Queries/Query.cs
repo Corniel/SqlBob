@@ -1,14 +1,14 @@
-﻿namespace SqlBob
+﻿namespace SqlBob;
+
+/// <summary>SQL Query builder.</summary>
+public static class Query
 {
-    /// <summary>SQL Query builder.</summary>
-    public static class Query
-    {
-        /// <summary>Creates a SELECT query.</summary>
-        public static SelectQuery Select(params object[] expressions)
+    /// <summary>Creates a SELECT query.</summary>
+    [Pure]
+    public static SelectQuery Select(params object[] expressions) 
+        => new()
         {
-            return new SelectQuery
-            {
-                SelectClause =
+            SelectClause =
                 (
                     expressions != null &&
                     expressions.Length == 1 &&
@@ -16,7 +16,5 @@
                 )
                     ? clause
                     : new SelectClause(expressions)
-            };
-        }
-    }
+        };
 }

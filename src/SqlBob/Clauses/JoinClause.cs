@@ -19,6 +19,7 @@ namespace SqlBob
         }
 
         /// <inherritdoc/>
+        [Pure]
         protected override Join Cast(object arg) => arg.ToString();
     }
 }

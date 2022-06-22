@@ -2,27 +2,50 @@
 
 public sealed record Query : SqlStatement
 {
-    public static Query Select(params object[] selections) => new(selections, null, null);
+    public static Query Select(params object[] selections)
+        => new(
+            SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
+            SQL.None,
+            SQL.None);
 
-    internal Query(object[] select, From from, Where where)
+    internal Query(SqlStatements selections, SqlStatement from, SqlStatement where)
     {
+        SelectClause = selections;
         FromClause = from;
         WhereClause = where;
     }
 
-    public From FromClause { get; }
-    public Where WhereClause { get; }
+    public SqlStatements SelectClause { get; }
+    public SqlStatement FromClause { get; }
+    public SqlStatement WhereClause { get; }
 
     [Pure]
     public Query From(object expression)
-        => new(Array.Empty<object>(), expression as From ?? SqlBob.From.Star, WhereClause);
+        => new(SelectClause, SQL.Convert(expression), WhereClause);
 
     [Pure]
     public Query Where(object expression)
-        => new(Array.Empty<object>(), FromClause, expression as Where ?? SqlBob.Where.None);
+        => new(SelectClause, FromClause, SQL.Convert(expression));
 
     public override void Write(SqlBuilder builder, int depth)
     {
-        throw new NotImplementedException();
+        Guard.NotNull(builder, nameof(builder)).Indent(depth);
+        builder
+            .Indent(depth)
+            .Write(Keyword.SELECT)
+            .Join(
+                ",",
+                (qb, select) => qb.NewLineOrSpace().Indent(depth + 1).Write(select, 0),
+                SelectClause)
+            .NewLineOrSpace();
+        if (WhereClause is not None)
+        {
+            builder
+                .Indent(depth)
+                .Write(Keyword.WHERE)
+                .NewLineOrSpace()
+                .Write(WhereClause, depth + 1)
+                .NewLineOrSpace();
+        }
     }
 }

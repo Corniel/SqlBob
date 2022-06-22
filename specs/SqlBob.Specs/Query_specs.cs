@@ -5,11 +5,16 @@ public class Can_be_constructed
     [Test]
     public void via_SQL_Select()
     {
-        var query = Query
-            .Select("*")
-            .From("MyTable [t]")
-            .Where("[t].Date < GetUtcDate()");
+        var myTable = Schema.Dbo.Table("MyTable").As("[t]");
 
-        query.Should().HaveSql("SELECT * FROM MyTable [t] WHERE [t].Date < GetUtcDate()");
+        var query = Query
+            .Select(myTable.Select(
+                "MyCol",
+                myTable.Col("myCol").As("alt"),
+                "ID"))
+            .From(myTable)
+            .Where(myTable.Col("Date").Lt(SqlFunction.GetUtcDate()));
+
+        query.Should().HaveSql("SELECT [t].MyCol, [t].myCol AS alt, [t].ID WHERE [t].Date < GetUtcDate()");
     }
 }

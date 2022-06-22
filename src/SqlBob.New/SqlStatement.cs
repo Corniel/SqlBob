@@ -1,5 +1,6 @@
 ﻿namespace SqlBob;
 
+[DebuggerDisplay("{DebuggerDisplay}")]
 public abstract record SqlStatement
 {
     /// <summary>Writes the SQL statement to the SQL builder buffer.</summary>
@@ -16,6 +17,19 @@ public abstract record SqlStatement
     /// The SQL builder.
     /// </param>
     public void Write(SqlBuilder builder) => Write(builder, 0);
+
+    [Pure]
+    public virtual Selection As(Alias alias) => new(this, alias);
+
+    [Pure]
+    public virtual SqlStatement Not() => new NotExpression(this);
+
+    public ComparisionExpression Eq(object expression) => new(this, "=", SQL.Convert(expression));
+    public ComparisionExpression Neq(object expression) => new(this, "<>", SQL.Convert(expression));
+    public ComparisionExpression Lt(object expression) => new(this, "<", SQL.Convert(expression));
+    public ComparisionExpression Lte(object expression) => new(this, "<=", SQL.Convert(expression));
+    public ComparisionExpression Gt(object expression) => new(this, ">", SQL.Convert(expression));
+    public ComparisionExpression Gte(object expression) => new(this, ">=", SQL.Convert(expression));
 
     [Pure]
     public Parenthesis Parenthesis() => this as Parenthesis ?? new(this);
@@ -46,4 +60,8 @@ public abstract record SqlStatement
         SqlBuilder.Pool.Push(builder);
         return sql;
     }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    internal string DebuggerDisplay
+        => $"{{{GetType().Name}}} {ToString(SqlFormatInfo.Debugger)}";
 }

@@ -14,7 +14,8 @@ public sealed record Selection : SqlStatement
     
     public Alias Alias { get; }
 
-    public Selection As(Alias alias) => new(Expression, alias);
+    [Pure]
+    public override Selection As(Alias alias) => new(Expression, alias);
 
     /// <inheritdoc />
     public override void Write(SqlBuilder builder, int depth)

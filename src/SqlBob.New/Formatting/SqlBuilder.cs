@@ -51,6 +51,13 @@ public sealed class SqlBuilder
         return this;
     }
 
+    [FluentSyntax]
+    public SqlBuilder Write(Schema schema)
+    {
+        sb.Append(schema);
+        return this;
+    }
+
     /// <summary>Concatenates all SQL statements using the specified
     /// separator between each statement. 
     /// </summary>
@@ -64,20 +71,18 @@ public sealed class SqlBuilder
     /// The statements to join.
     /// </param>
     [FluentSyntax]
-    public SqlBuilder Join(object separator, Action<SqlBuilder, SqlStatement> write, params SqlStatement[] statements)
+    public SqlBuilder Join(object separator, Action<SqlBuilder, SqlStatement> write, IEnumerable<SqlStatement> statements)
     {
         Guard.NotNull(statements, nameof(statements));
 
-        // Nothing to join.
-        if (statements.Length == 0)
+        var index = 0;
+        foreach(var statement in statements)
         {
-            return this;
-        }
-        write(this, statements[0]);
-        for (var index = 1; index < statements.Length; index++)
-        {
-            Write(SQL.Convert(separator), 0);
-            write.Invoke(this, statements[index]);
+            if (index++ != 0)
+            {
+                Write(SQL.Convert(separator), 0);
+            }
+            write(this, statement);
         }
         return this;
     }
@@ -95,6 +100,10 @@ public sealed class SqlBuilder
         }
         return this;
     }
+
+    /// <summary>Writes a single space.</summary>
+    [FluentSyntax]
+    public SqlBuilder Dot() => Literal(".");
 
     /// <summary>Writes a single space.</summary>
     [FluentSyntax]

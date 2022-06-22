@@ -4,7 +4,7 @@
 public sealed class SqlFormatInfo
 {
     internal static readonly SqlFormatInfo Minified = new() { UseNewLine = false, Indent = "", Throw = true };
-    internal static readonly SqlFormatInfo Debugger = new();
+    internal static readonly SqlFormatInfo Debugger = new() { UseNewLine = false, Indent = "", Throw = false };
 
     /// <summary>Gets and sets the SQL version.</summary>
     public SqlVersion Version { get; init; }

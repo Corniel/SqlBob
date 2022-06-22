@@ -1,22 +1,25 @@
 ﻿namespace SqlBob;
 
-public sealed record Parenthesis : SqlStatement
+/// <summary>Represent a SQL NOT statement.</summary>
+public sealed record NotExpression : SqlStatement
 {
-    /// <summary>Creates a new instance of the <see cref="Parenthesis"/> record.</summary>
-    internal Parenthesis(SqlStatement expression) => Expression = expression;
+    internal NotExpression(SqlStatement expression)=> Expression = expression;
 
-    /// <summary>The SQL expression to parenthesize.</summary>
     public SqlStatement Expression { get; }
 
-    /// <inheritdoc />
+    public override SqlStatement Not() => Expression;
+
+    /// <inheritdoc/>
     public override void Write(SqlBuilder builder, int depth)
         => Guard.NotNull(builder, nameof(builder))
         .Indent(depth)
+        .Write(Keyword.NOT)
         .Literal("(")
         .NewLine()
         .Write(Expression, depth + 1)
         .NewLine()
         .Indent(depth)
         .Literal(")")
-        .NewLineOrSpace();
+        .NewLine()
+    ;
 }

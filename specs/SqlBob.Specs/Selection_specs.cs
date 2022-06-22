@@ -1,4 +1,4 @@
-﻿namespace SqlBob.Specs;
+﻿namespace Selection_specs;
 
 public class Can_be_created
 {

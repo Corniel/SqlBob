@@ -37,7 +37,13 @@ public sealed record Query : SqlStatement
                 ",",
                 (qb, select) => qb.NewLineOrSpace().Indent(depth + 1).Write(select, 0),
                 SelectClause)
+            .NewLineOrSpace()
+            .Indent(depth)
+            .Write(Keyword.FROM)
+            .Space()
+            .Write(FromClause, 0)
             .NewLineOrSpace();
+
         if (WhereClause is not None)
         {
             builder

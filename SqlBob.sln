@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlBob", "src\SqlBob\SqlBob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlBob.Specs", "specs\SqlBob.Specs\SqlBob.Specs.csproj", "{8A910582-3F89-417F-A00F-1724A992001B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlBob.New", "src\SqlBob.New\SqlBob.New.csproj", "{3A47AEC9-3A06-4C9B-9610-8DCED313DB09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{8A910582-3F89-417F-A00F-1724A992001B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A910582-3F89-417F-A00F-1724A992001B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A910582-3F89-417F-A00F-1724A992001B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A47AEC9-3A06-4C9B-9610-8DCED313DB09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A47AEC9-3A06-4C9B-9610-8DCED313DB09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A47AEC9-3A06-4C9B-9610-8DCED313DB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A47AEC9-3A06-4C9B-9610-8DCED313DB09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,10 @@
-﻿using SqlBob;
-using SqlBob.Specs.TestTools;
+﻿using SqlBob.Specs.TestTools;
 
 namespace FluentAssertions;
 
 public static class SqlStatementExtensions
 {
     public static SqlStatementAssertions Should<TSqlStatement>(this TSqlStatement statement)
-        where TSqlStatement : ISqlStatement
+        where TSqlStatement : SqlStatement
         => new(statement);
 }

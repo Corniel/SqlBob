@@ -1,10 +1,13 @@
 ﻿namespace SqlBob;
 
 /// <summary>Represents a SQL JOIN.</summary>
-public abstract class Join : SqlStatement
+public abstract partial record Join : ISqlStatement
 {
     /// <summary>Represents a SQL JOIN.</summary>
-    protected Join(object expression) => Expression = Guard.NotNull(Convert(expression), nameof(expression));
+    protected Join(object expression)
+    {
+        Expression = Guard.NotNull(SQL.Convert(expression), nameof(expression));
+    }
 
     /// <summary>The type (inner, left, right, outer) join.</summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -14,13 +17,13 @@ public abstract class Join : SqlStatement
     public ISqlStatement Expression { get; }
 
     /// <summary>The alias to refer to.</summary>
-    public Alias Alias { get; internal protected set; }
+    public Alias Alias { get; internal init; }
 
     /// <summary>The join condition.</summary>
-    public ISqlStatement Condition { get; internal protected set; } = SyntaxError.JoinOnConditionNotSpecified;
+    public ISqlStatement Condition { get; internal init; } = SyntaxError.JoinOnConditionNotSpecified;
 
     /// <inherritdoc/>
-    public override void Write(SqlBuilder builder, int depth)
+    public virtual void Write(SqlBuilder builder, int depth)
     {
         Guard.NotNull(builder, nameof(builder));
 
@@ -45,26 +48,12 @@ public abstract class Join : SqlStatement
             .NewLineOrSpace();
     }
 
+    /// <inheritdoc/>
+    [Pure]
+    public sealed override string ToString() => this.UseSqlBuilder();
+
     /// <summary>Implicitly casts a <see cref="string"/> to a <see cref="Join"/>.</summary>
     public static implicit operator Join(string value) => value is null ? null : new RawJoin(value);
 
-    /// <summary>Creates a JOIN based on a raw SQL <see cref="string"/>.</summary>
-    [Pure]
-    public static Join Raw(string value) => value;
-
-    /// <summary>Creates an INNER JOIN.</summary>
-    [Pure]
-    public static InnerJoin Inner(object expression) => new(expression);
-
-    /// <summary>Creates an LEFT (OUTER) JOIN.</summary>
-    [Pure]
-    public static LeftJoin Left(object expression) => new(expression);
-
-    /// <summary>Creates an RIGHT (OUTER) JOIN.</summary>
-    [Pure]
-    public static RightJoin Right(object expression) => new(expression);
-
-    /// <summary>Creates an FULL OUTER JOIN.</summary>
-    [Pure]
-    public static FullOutherJoin FullOuther(object expression) => new(expression);
+  
 }

@@ -1,18 +1,19 @@
 ﻿using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
+using System;
 
 namespace SqlBob.Specs.TestTools
 {
-    public class SqlStatementAssertions : ReferenceTypeAssertions<ISqlStatement, SqlStatementAssertions>
+    public class SqlStatementAssertions : ReferenceTypeAssertions<SqlStatement, SqlStatementAssertions>
     {
-        public SqlStatementAssertions(ISqlStatement subject) : base(subject) { }
+        public SqlStatementAssertions(SqlStatement subject) : base(subject) { }
 
         protected override string Identifier => "SqlStatement";
 
         public AndConstraint<SqlStatementAssertions> HasSyntaxError()
         {
             Func<string> minified = () => Subject.Minified();
-            minified.Should().Throw<SqlSyntaxException>();
+            minified.Should().Throw<Exception>();
             return new(this);
         }
 

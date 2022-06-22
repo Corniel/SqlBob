@@ -6,9 +6,6 @@ public sealed class SqlFormatInfo
     internal static readonly SqlFormatInfo Minified = new() { UseNewLine = false, Indent = "", Throw = true };
     internal static readonly SqlFormatInfo Debugger = new() { UseNewLine = false, Indent = "", Throw = false };
 
-    /// <summary>Gets and sets the SQL version.</summary>
-    public SqlVersion Version { get; init; }
-
     /// <summary>Use new line (default), or spaces to split statements.</summary>
     public bool UseNewLine { get; init; } = true;
 

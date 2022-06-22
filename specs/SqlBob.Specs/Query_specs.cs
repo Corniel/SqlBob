@@ -18,3 +18,11 @@ public class Can_be_constructed
         query.Should().HaveSql("SELECT [t].MyCol, [t].myCol AS alt, [t].ID FROM [dbo].MyTable [t] WHERE [t].Date < GetUtcDate()");
     }
 }
+
+public class Requires
+{
+    [Test]
+    public void From_clause()
+        => Query.Select("*").Should().HasSyntaxError()
+        .WithMessage("SQL contains a syntax error: SELECT * FROM /* missing from statement */");
+}

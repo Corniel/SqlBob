@@ -24,7 +24,7 @@ public sealed record Table : SqlStatement
     public string Name { get; }
     public Alias Alias { get; }
 
-    public Table As(Alias alias) => new(Schema, Name, alias);
+    public new Table As(Alias alias) => new(Schema, Name, alias);
 
     public Column Col(string name) => new(this, name);
 

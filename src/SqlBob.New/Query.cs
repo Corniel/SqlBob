@@ -5,7 +5,7 @@ public sealed record Query : SqlStatement
     public static Query Select(params object[] selections)
         => new(
             SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
-            SQL.None,
+            SQL.Missing("from statement"),
             SQL.None);
 
     internal Query(SqlStatements selections, SqlStatement from, SqlStatement where)
@@ -21,11 +21,11 @@ public sealed record Query : SqlStatement
 
     [Pure]
     public Query From(object expression)
-        => new(SelectClause, SQL.Convert(expression), WhereClause);
+        => new(SelectClause, SQL.Convert(expression) ?? SQL.Missing("from statement"), WhereClause);
 
     [Pure]
     public Query Where(object expression)
-        => new(SelectClause, FromClause, SQL.Convert(expression));
+        => new(SelectClause, FromClause, SQL.Convert(expression) ?? SQL.None);
 
     public override void Write(SqlBuilder builder, int depth)
     {

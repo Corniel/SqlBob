@@ -16,5 +16,5 @@ public sealed class SqlFormatInfo
     public string Indent { get; init; } = new string(' ', 4);
 
     /// <summary>Only to support <see cref="Debugger"/>.</summary>
-    internal bool Throw { get; init; }
+    internal bool Throw { get; init; } = true;
 }

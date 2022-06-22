@@ -11,7 +11,7 @@ public sealed class SqlBuilder
     public SqlBuilder() : this(null) { }
 
     /// <summary>Creates a new instance of a <see cref="SqlBuilder"/>.</summary>
-    public SqlBuilder(SqlFormatInfo formatInfo) => FormatInfo = formatInfo ?? SqlFormatInfo.Debugger;
+    public SqlBuilder(SqlFormatInfo? formatInfo) => FormatInfo = formatInfo ?? SqlFormatInfo.Debugger;
 
     /// <summary>Gets and sets the format info.</summary>
     public SqlFormatInfo FormatInfo { get; internal set; }
@@ -23,6 +23,14 @@ public sealed class SqlBuilder
         sb.Append(value);
         return this;
     }
+
+    /// <summary>Writes a SQL statement.</summary>
+    /// <param name="statement">
+    /// The SQL statement to write.
+    /// </param>
+    /// <param name="depth"></param>
+    [FluentSyntax]
+    public SqlBuilder Write(SqlStatement statement) => Write(statement, 0);
 
     /// <summary>Writes a SQL statement.</summary>
     /// <param name="statement">
@@ -80,7 +88,7 @@ public sealed class SqlBuilder
         {
             if (index++ != 0)
             {
-                Write(SQL.Convert(separator), 0);
+                Write(SQL.Convert(separator)!);
             }
             write(this, statement);
         }
@@ -161,8 +169,9 @@ public sealed class SqlBuilder
     {
         if (Throw && HasSyntaxError)
         {
-            // TODO:
-           // throw new SqlSyntaxException(sb.ToString());
+            var error = new SyntaxError($"SQL contains a syntax error: {sb}");
+            Pool.Push(this);
+            throw error;
         }
     }
 

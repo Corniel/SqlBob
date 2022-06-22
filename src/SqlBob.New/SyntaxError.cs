@@ -1,23 +1,13 @@
 ﻿namespace SqlBob;
 
-public sealed record SyntaxError : SqlStatement
+[Serializable]
+public class SyntaxError : FormatException
 {
-    internal SyntaxError(string message) => Message = message;
-    
-    /// <summary>The message that describes the SQL syntax error.</summary>
-    public string Message { get; }
+    public SyntaxError() { }
 
-    /// <summary>Sets the <see cref="SqlBuilder.HasSyntaxError"/> to true with the message.</summary>
-    public override void Write(SqlBuilder builder, int depth)
-    {
-        Guard.NotNull(builder, nameof(builder));
+    public SyntaxError(string? message) : base(message) { }
 
-        builder.HasSyntaxError = true;
+    public SyntaxError(string? message, Exception? innerException) : base(message, innerException) { }
 
-        builder
-            .Literal("/* ")
-            .Literal(Message)
-            .Literal(" */")
-            .NewLine();
-    }
+    protected SyntaxError(SerializationInfo info, StreamingContext context) : base(info, context) { }
 }

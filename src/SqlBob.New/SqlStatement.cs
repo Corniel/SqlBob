@@ -24,12 +24,12 @@ public abstract record SqlStatement
     [Pure]
     public virtual SqlStatement Not() => new NotExpression(this);
 
-    public ComparisionExpression Eq(object expression) => new(this, "=", SQL.Convert(expression));
-    public ComparisionExpression Neq(object expression) => new(this, "<>", SQL.Convert(expression));
-    public ComparisionExpression Lt(object expression) => new(this, "<", SQL.Convert(expression));
-    public ComparisionExpression Lte(object expression) => new(this, "<=", SQL.Convert(expression));
-    public ComparisionExpression Gt(object expression) => new(this, ">", SQL.Convert(expression));
-    public ComparisionExpression Gte(object expression) => new(this, ">=", SQL.Convert(expression));
+    public ComparisionExpression Eq(object expression) => new(this, "=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public ComparisionExpression Neq(object expression) => new(this, "<>", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public ComparisionExpression Lt(object expression) => new(this, "<", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public ComparisionExpression Lte(object expression) => new(this, "<=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public ComparisionExpression Gt(object expression) => new(this, ">", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public ComparisionExpression Gte(object expression) => new(this, ">=", SQL.Convert(expression) ?? SQL.Missing("expression"));
 
     [Pure]
     public Parenthesis Parenthesis() => this as Parenthesis ?? new(this);
@@ -51,7 +51,7 @@ public abstract record SqlStatement
     /// destruction.
     /// </remarks>
     [Pure]
-    public string ToString(SqlFormatInfo formatInfo)
+    public string ToString(SqlFormatInfo? formatInfo)
     {
         var builder = SqlBuilder.Pool.Pop();
         builder.FormatInfo = formatInfo ?? SqlFormatInfo.Debugger;

@@ -2,8 +2,6 @@
 
 public sealed record Selection : SqlStatement
 {
-    public static readonly Selection Star = new(SQL.Raw("*"), Alias.None);
-
     internal Selection(SqlStatement expression, Alias alias)
     {
         Expression = expression;

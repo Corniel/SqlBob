@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
+using FluentAssertions.Specialized;
 using System;
 
 namespace SqlBob.Specs.TestTools
@@ -10,11 +11,10 @@ namespace SqlBob.Specs.TestTools
 
         protected override string Identifier => "SqlStatement";
 
-        public AndConstraint<SqlStatementAssertions> HasSyntaxError()
+        public ExceptionAssertions<SyntaxError> HasSyntaxError()
         {
             Func<string> minified = () => Subject.Minified();
-            minified.Should().Throw<Exception>();
-            return new(this);
+            return minified.Should().Throw<SyntaxError>();
         }
 
         public AndConstraint<SqlStatementAssertions> HaveSql(string sql)

@@ -5,9 +5,6 @@ public static class SQL
     public static readonly None None = new();
 
     [Pure]
-    public static SyntaxError Error(string message) => new(Guard.NotNullOrEmpty(message, nameof(message)));
-
-    [Pure]
     public static SqlFunction Function(string name, params object[] args)
         => new(name,SqlStatements.None.AddRange( ConvertAll(args)));
 
@@ -15,7 +12,8 @@ public static class SQL
     public static Raw Raw(string? sql) => new(sql);
 
     [Pure]
-    public static Selection Select(object expression) => new(Convert(expression ?? Error("")), Alias.None);
+    public static Selection Select(object expression) 
+        => new(Convert(expression) ?? Missing("select statement"), Alias.None);
     
     /// <summary>Converts a collection of objects to a collection of SQL statements.</summary>
     [Pure]
@@ -25,5 +23,11 @@ public static class SQL
 
     /// <summary>Converts an object to a SQL statement.</summary>
     [Pure]
-    internal static SqlStatement Convert(object arg) => arg as SqlStatement ?? Raw(arg.ToString());
+    internal static SqlStatement? Convert(object? arg) 
+        => arg is null
+        ? null
+        : arg as SqlStatement ?? Raw(arg.ToString());
+
+    [Pure]
+    internal static MissingSql Missing(string message) => new(message);
 }

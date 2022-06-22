@@ -11,6 +11,9 @@ public sealed record Column : SqlStatement
     public Table Table { get; }
     public string Name { get; }
 
+    public Order Asc() => new(this, true);
+    public Order Desc() => new(this, false);
+
     /// <inheritdoc />
     public override void Write(SqlBuilder builder, int depth)
     {

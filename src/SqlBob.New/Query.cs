@@ -6,26 +6,37 @@ public sealed record Query : SqlStatement
         => new(
             SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
             SQL.Missing("from statement"),
-            SQL.None);
+            SQL.None,
+            SqlStatements.None);
 
-    internal Query(SqlStatements selections, SqlStatement from, SqlStatement where)
+    internal Query(
+        SqlStatements selections, 
+        SqlStatement from,
+        SqlStatement where,
+        SqlStatements orderBy)
     {
         SelectClause = selections;
         FromClause = from;
         WhereClause = where;
+        OrderByClause = orderBy;
     }
 
     public SqlStatements SelectClause { get; }
     public SqlStatement FromClause { get; }
     public SqlStatement WhereClause { get; }
+    public SqlStatements OrderByClause { get; }
 
     [Pure]
     public Query From(object expression)
-        => new(SelectClause, SQL.Convert(expression) ?? SQL.Missing("from statement"), WhereClause);
+        => new(SelectClause, SQL.Convert(expression) ?? SQL.Missing("from statement"), WhereClause, OrderByClause);
 
     [Pure]
     public Query Where(object expression)
-        => new(SelectClause, FromClause, SQL.Convert(expression) ?? SQL.None);
+        => new(SelectClause, FromClause, SQL.Convert(expression) ?? SQL.None, OrderByClause);
+
+    [Pure]
+    public Query OrderBy(params object[] orderBys)
+        => new(SelectClause, FromClause, WhereClause, SqlStatements.None.AddRange(SQL.ConvertAll(orderBys)));
 
     public override void Write(SqlBuilder builder, int depth)
     {
@@ -52,6 +63,17 @@ public sealed record Query : SqlStatement
                 .NewLineOrSpace()
                 .Write(WhereClause, depth + 1)
                 .NewLineOrSpace();
+        }
+        if (OrderByClause.Any())
+        {
+            builder.Indent(depth)
+                .Write(Keyword.ORDER_BY)
+                .NewLineOrSpace()
+                .Join(
+                    ",",
+                    (qb, statement) => qb.NewLineOrSpace().Write(statement, depth + 1),
+                    OrderByClause
+                );
         }
     }
 }

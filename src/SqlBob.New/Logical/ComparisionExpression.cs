@@ -1,6 +1,6 @@
 ﻿namespace SqlBob
 {
-    public sealed record ComparisionExpression : SqlStatement
+    public sealed class ComparisionExpression : SqlStatement
     {
         internal ComparisionExpression(SqlStatement left, Keyword @operator, SqlStatement right)
         {

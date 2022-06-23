@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-public sealed record Column : SqlStatement
+public sealed class Column : SqlStatement
 {
     internal Column(Table table, string name)
     {

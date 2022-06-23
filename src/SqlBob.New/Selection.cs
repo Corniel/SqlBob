@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-public sealed record Selection : SqlStatement
+public sealed class Selection : SqlStatement
 {
     internal Selection(SqlStatement expression, Alias alias)
     {

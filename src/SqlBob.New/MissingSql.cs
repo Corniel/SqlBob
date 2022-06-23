@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-internal sealed record MissingSql : SqlStatement
+internal sealed class MissingSql : SqlStatement
 {
     internal MissingSql(string message) => Message = message;
     

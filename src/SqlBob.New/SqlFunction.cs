@@ -1,7 +1,7 @@
 ﻿namespace SqlBob;
 
 /// <summary>Represents a SQL function.</summary>
-public sealed record SqlFunction : SqlStatement
+public sealed class SqlFunction : SqlStatement
 {
     /// <summary>Returns a Count() SQL function.</summary>
     [Pure]

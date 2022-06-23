@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-public sealed record Order : SqlStatement
+public sealed class Order : SqlStatement
 {
     public static Order By(object expression) => new(SQL.Convert(expression) ?? SQL.Missing("expression"), true);
 

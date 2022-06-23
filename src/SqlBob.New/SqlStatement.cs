@@ -1,7 +1,7 @@
 ﻿namespace SqlBob;
 
 [DebuggerDisplay("{DebuggerDisplay}")]
-public abstract record SqlStatement
+public abstract class SqlStatement
 {
     /// <summary>Writes the SQL statement to the SQL builder buffer.</summary>
     /// <param name="builder">

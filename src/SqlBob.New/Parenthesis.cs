@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-public sealed record Parenthesis : SqlStatement
+public sealed class Parenthesis : SqlStatement
 {
     /// <summary>Creates a new instance of the <see cref="Parenthesis"/> record.</summary>
     internal Parenthesis(SqlStatement expression) => Expression = expression;

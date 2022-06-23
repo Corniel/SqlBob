@@ -1,7 +1,7 @@
 ﻿namespace SqlBob;
 
 /// <summary>Represent a SQL NOT statement.</summary>
-public sealed record NotExpression : SqlStatement
+public sealed class NotExpression : SqlStatement
 {
     internal NotExpression(SqlStatement expression)=> Expression = expression;
 

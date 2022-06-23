@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-public sealed record Table : SqlStatement
+public sealed class Table : SqlStatement
 {
     internal Table(Schema schema, string name, Alias alias)
     {

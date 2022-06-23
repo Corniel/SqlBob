@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-public sealed record Raw : SqlStatement
+public sealed class Raw : SqlStatement
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly string? Value;

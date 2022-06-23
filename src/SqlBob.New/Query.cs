@@ -1,6 +1,6 @@
 ﻿namespace SqlBob;
 
-public sealed record Query : SqlStatement
+public sealed class Query : SqlStatement
 {
     public static Query Select(params object[] selections)
         => new(

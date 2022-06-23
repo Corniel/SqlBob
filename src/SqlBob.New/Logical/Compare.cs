@@ -1,8 +1,8 @@
 ﻿namespace SqlBob
 {
-    public sealed class ComparisionExpression : SqlStatement
+    public sealed class Compare : SqlStatement
     {
-        internal ComparisionExpression(SqlStatement left, Keyword @operator, SqlStatement right)
+        internal Compare(SqlStatement left, Keyword @operator, SqlStatement right)
         {
             Operator = @operator;
             Left = left;

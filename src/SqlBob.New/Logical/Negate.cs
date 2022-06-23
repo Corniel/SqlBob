@@ -1,9 +1,9 @@
 ﻿namespace SqlBob;
 
 /// <summary>Represent a SQL NOT statement.</summary>
-public sealed class NotExpression : SqlStatement
+public sealed class Negate : SqlStatement
 {
-    internal NotExpression(SqlStatement expression)=> Expression = expression;
+    internal Negate(SqlStatement expression)=> Expression = expression;
 
     public SqlStatement Expression { get; }
 

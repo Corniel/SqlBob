@@ -22,14 +22,14 @@ public abstract class SqlStatement
     public virtual Selection As(Alias alias) => new(this, alias);
 
     [Pure]
-    public virtual SqlStatement Not() => new NotExpression(this);
+    public virtual SqlStatement Not() => new Negate(this);
 
-    public ComparisionExpression Eq(object expression) => new(this, "=", SQL.Convert(expression) ?? SQL.Missing("expression"));
-    public ComparisionExpression Neq(object expression) => new(this, "<>", SQL.Convert(expression) ?? SQL.Missing("expression"));
-    public ComparisionExpression Lt(object expression) => new(this, "<", SQL.Convert(expression) ?? SQL.Missing("expression"));
-    public ComparisionExpression Lte(object expression) => new(this, "<=", SQL.Convert(expression) ?? SQL.Missing("expression"));
-    public ComparisionExpression Gt(object expression) => new(this, ">", SQL.Convert(expression) ?? SQL.Missing("expression"));
-    public ComparisionExpression Gte(object expression) => new(this, ">=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Eq(object expression) => new(this, "=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Ne(object expression) => new(this, "<>", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Lt(object expression) => new(this, "<", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Lte(object expression) => new(this, "<=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Gt(object expression) => new(this, ">", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Gte(object expression) => new(this, ">=", SQL.Convert(expression) ?? SQL.Missing("expression"));
 
     [Pure]
     public Parenthesis Parenthesis() => this as Parenthesis ?? new(this);

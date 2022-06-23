@@ -10,6 +10,7 @@
 namespace SqlBob.Diagnostics;
 
 /// <summary>Allows the debugger to display collections.</summary>
+[ExcludeFromCodeCoverage]
 public class CollectionDebugView
 {
     /// <summary>A reference to the enumeration to display.</summary>

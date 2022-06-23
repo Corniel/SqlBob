@@ -9,3 +9,4 @@ global using System.Resources;
 global using System.Runtime.Serialization;
 global using System.Text;
 global using SqlBob.Diagnostics.Contracts;
+global using System.Diagnostics.CodeAnalysis;

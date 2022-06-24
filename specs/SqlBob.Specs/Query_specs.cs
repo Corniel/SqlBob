@@ -36,7 +36,7 @@ public class Can_be_constructed
 public class Requires
 {
     [Test]
-    public void From_clause()
-        => SQL.Query.Select("*").Should().HaveSyntaxError()
-        .WithMessage("SQL contains a syntax error: SELECT * FROM /* missing from */");
+    public void Both_Select_and_From_clause()
+        => SQL.Query.Should().HaveSyntaxError()
+        .WithMessage("SQL contains a syntax error: /* missing select */ /* missing from */");
 }

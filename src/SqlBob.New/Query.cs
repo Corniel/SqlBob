@@ -4,39 +4,67 @@ public sealed class Query : SqlStatement
 {
     public static Query Select(params object[] selections)
         => new(
-            SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
-            SQL.Missing("from statement"),
-            SQL.None,
-            SqlStatements.None);
+            select: SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
+            from: SQL.Missing("from statement"),
+            join: SqlStatements.None,
+            where: SQL.None,
+            orderBy: SqlStatements.None);
 
     internal Query(
-        SqlStatements selections, 
+        SqlStatements select, 
         SqlStatement from,
+        SqlStatements join,
         SqlStatement where,
         SqlStatements orderBy)
     {
-        SelectClause = selections;
+        SelectClause = select;
         FromClause = from;
+        JoinClause = join;
         WhereClause = where;
         OrderByClause = orderBy;
     }
 
     public SqlStatements SelectClause { get; }
     public SqlStatement FromClause { get; }
+    public SqlStatements JoinClause { get; }
     public SqlStatement WhereClause { get; }
     public SqlStatements OrderByClause { get; }
 
     [Pure]
     public Query From(object expression)
-        => new(SelectClause, SQL.Convert(expression) ?? SQL.Missing("from statement"), WhereClause, OrderByClause);
+        => new(
+            select: SelectClause,
+            from: SQL.Convert(expression) ?? SQL.Missing("from statement"),
+            join: JoinClause,
+            where: WhereClause, 
+            orderBy: OrderByClause);
+
+    [Pure]
+    public Query Join(params object[] join)
+      => new(
+          select: SelectClause,
+          from: FromClause,
+          join: SqlStatements.None.AddRange(SQL.ConvertAll(join)),
+          where: WhereClause,
+          orderBy: OrderByClause);
 
     [Pure]
     public Query Where(object expression)
-        => new(SelectClause, FromClause, SQL.Convert(expression) ?? SQL.None, OrderByClause);
+        => new(
+            select: SelectClause, 
+            from: FromClause, 
+            join: JoinClause,
+            where: SQL.Convert(expression) ?? SQL.None,
+            orderBy: OrderByClause);
 
     [Pure]
-    public Query OrderBy(params object[] orderBys)
-        => new(SelectClause, FromClause, WhereClause, SqlStatements.None.AddRange(SQL.ConvertAll(orderBys)));
+    public Query OrderBy(params object[] orderBy)
+        => new(
+            select: SelectClause, 
+            from: FromClause,
+            join: JoinClause,
+            where: WhereClause,
+            orderBy: SqlStatements.None.AddRange(SQL.ConvertAll(orderBy)));
 
     public override void Write(SqlBuilder builder, int depth)
     {
@@ -55,6 +83,10 @@ public sealed class Query : SqlStatement
             .Write(FromClause, 0)
             .NewLineOrSpace();
 
+        foreach(var join in JoinClause)
+        {
+            builder.Write(join, depth);
+        }
         if (WhereClause is not None)
         {
             builder

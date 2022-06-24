@@ -5,7 +5,7 @@ internal static class Guarding
     private static readonly None Nill = new();
 
     [Pure]
-    public static SqlStatement NotNull(this SqlStatement? statement)
+    public static SqlStatement Optional(this SqlStatement? statement)
         => statement ?? Nill;
 
     [Pure]

@@ -2,27 +2,24 @@
 
 public sealed class Query : SqlStatement
 {
-    [Pure]
-    public static Query Select(params object[] selections)
-        => new(
-            select: SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
-            from: null,
-            join: SqlStatements.None,
-            where: null,
-            orderBy: SqlStatements.None);
+    internal static readonly Query Empty = new(SqlStatements.None, null, SqlStatements.None, null, SqlStatements.None, null, null);
 
     internal Query(
         SqlStatements select, 
         SqlStatement? from,
         SqlStatements join,
         SqlStatement? where,
-        SqlStatements orderBy)
+        SqlStatements orderBy,
+        SqlStatement? offset,
+        SqlStatement? fetch)
     {
         SelectClause = select;
         FromClause = from.Required(nameof(from));
         JoinClause = join;
-        WhereClause = where.NotNull();
+        WhereClause = where.Optional();
         OrderByClause = orderBy;
+        OffsetClause = offset.Optional();
+        FetchClause = fetch.Optional();
     }
 
     public SqlStatements SelectClause { get; }
@@ -30,42 +27,85 @@ public sealed class Query : SqlStatement
     public SqlStatements JoinClause { get; }
     public SqlStatement WhereClause { get; }
     public SqlStatements OrderByClause { get; }
+    public SqlStatement OffsetClause { get; }
+    public SqlStatement FetchClause { get; }
 
     [Pure]
-    public Query From(object expression)
+    public Query Select(params object[] selections)
         => new(
-            select: SelectClause,
-            from: SQL.Convert(expression).Required("from"),
-            join: JoinClause,
-            where: WhereClause, 
-            orderBy: OrderByClause);
+        select: SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
+        from: FromClause,
+        join: JoinClause,
+        where: WhereClause,
+        orderBy: OrderByClause,
+        offset: OffsetClause,
+        fetch: FetchClause);
+
+    [Pure]
+    public Query From(object? expression)
+        => new(
+        select: SelectClause,
+        from: SQL.Convert(expression).Required("from"),
+        join: JoinClause,
+        where: WhereClause, 
+        orderBy: OrderByClause,
+        offset: OffsetClause,
+        fetch: FetchClause);
 
     [Pure]
     public Query Join(params object[] join)
-      => new(
-          select: SelectClause,
-          from: FromClause,
-          join: SqlStatements.None.AddRange(SQL.ConvertAll(join)),
-          where: WhereClause,
-          orderBy: OrderByClause);
+        => new(
+        select: SelectClause,
+        from: FromClause,
+        join: SqlStatements.None.AddRange(SQL.ConvertAll(join)),
+        where: WhereClause,
+        orderBy: OrderByClause,
+        offset: OffsetClause,
+        fetch: FetchClause);
 
     [Pure]
-    public Query Where(object expression)
+    public Query Where(object? where)
         => new(
-            select: SelectClause, 
-            from: FromClause, 
-            join: JoinClause,
-            where: expression as Where ?? new Where(SQL.Convert(expression)),
-            orderBy: OrderByClause);
+        select: SelectClause, 
+        from: FromClause, 
+        join: JoinClause,
+        where: Convert(where, x => new Where(x)),
+        orderBy: OrderByClause,
+        offset: OffsetClause,
+        fetch: FetchClause);
 
     [Pure]
     public Query OrderBy(params object[] orderBy)
         => new(
-            select: SelectClause, 
-            from: FromClause,
-            join: JoinClause,
-            where: WhereClause,
-            orderBy: SqlStatements.None.AddRange(SQL.ConvertAll(orderBy)));
+        select: SelectClause, 
+        from: FromClause,
+        join: JoinClause,
+        where: WhereClause,
+        orderBy: SqlStatements.None.AddRange(SQL.ConvertAll(orderBy)),
+        offset: OffsetClause,
+        fetch: FetchClause);
+
+    [Pure]
+    public Query Offset(object? offset)
+        => new(
+        select: SelectClause,
+        from: FromClause,
+        join: JoinClause,
+        where: WhereClause,
+        orderBy: OrderByClause, // TODO: required
+        offset: Convert(offset, x => new Offset(x)),
+        fetch: FetchClause);
+
+    [Pure]
+    public Query Fetch(object? fetch)
+        => new(
+        select: SelectClause,
+        from: FromClause,
+        join: JoinClause,
+        where: WhereClause,
+        orderBy: OrderByClause, // TODO: required
+        offset: OffsetClause,
+        fetch: Convert(fetch, x => new Fetch(x)));
 
     public override void Write(SqlBuilder builder, int depth)
     {
@@ -100,5 +140,6 @@ public sealed class Query : SqlStatement
                     OrderByClause
                 );
         }
+        builder.Write(OffsetClause);
     }
 }

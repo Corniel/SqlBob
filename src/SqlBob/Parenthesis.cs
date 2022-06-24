@@ -2,7 +2,7 @@
 
 public sealed class Parenthesis : SqlStatement
 {
-    /// <summary>Creates a new instance of the <see cref="Parenthesis"/> record.</summary>
+    /// <summary>Creates a new instance of the <see cref="Parenthesis"/>class.</summary>
     internal Parenthesis(SqlStatement expression) => Expression = expression;
 
     /// <summary>The SQL expression to parenthesize.</summary>

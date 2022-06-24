@@ -78,4 +78,15 @@ public abstract class SqlStatement
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     internal string DebuggerDisplay
         => $"{{{GetType().Name}}} {this}";
+
+    [Pure]
+    internal static SqlStatement? Convert<TSqlStatement>(object? expression, Func<SqlStatement, TSqlStatement> create) where TSqlStatement : SqlStatement
+        => expression switch
+        {
+            null => null,
+            string str when string.IsNullOrWhiteSpace(str) => null,
+            TSqlStatement statement => statement,
+            SqlStatement statement => create(statement),
+            _ => create(SQL.Raw(expression.ToString())),
+        };
 }

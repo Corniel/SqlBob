@@ -8,7 +8,7 @@ public class Can_be_constructed
         var myTable = Schema.Dbo.Table("MyTable").As("[t]");
         var joinTable = Schema.Sys.Table("User").As("u");
 
-        var query = Query
+        var query = SQL.Query
             .Select(myTable.Select(
                 "MyCol",
                 myTable.Column("myCol").As("alt"),
@@ -35,6 +35,6 @@ public class Requires
 {
     [Test]
     public void From_clause()
-        => Query.Select("*").Should().HaveSyntaxError()
+        => SQL.Query.Select("*").Should().HaveSyntaxError()
         .WithMessage("SQL contains a syntax error: SELECT * FROM /* missing from */");
 }

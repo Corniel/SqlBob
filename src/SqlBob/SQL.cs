@@ -2,6 +2,8 @@
 
 public static class SQL
 {
+    public static Query Query => Query.Empty;
+
     [Pure]
     public static Parameter Parameter(string? sql) => new(sql);
 

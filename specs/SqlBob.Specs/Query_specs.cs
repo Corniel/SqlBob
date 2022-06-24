@@ -3,7 +3,7 @@
 public class Can_be_constructed
 {
     [Test]
-    public void via_SQL_Select()
+    public void via_SQL_Query()
     {
         var myTable = Schema.Dbo.Table("MyTable").As("[t]");
         var joinTable = Schema.Sys.Table("User").As("u");

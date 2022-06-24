@@ -11,15 +11,15 @@ public class Can_be_constructed
         var query = Query
             .Select(myTable.Select(
                 "MyCol",
-                myTable.Col("myCol").As("alt"),
+                myTable.Columns("myCol").As("alt"),
                 "ID"))
             .From(myTable)
             .Join(
-                Join.Inner(joinTable).On(joinTable.Col("Id").Eq(myTable.Col("User"))))
+                Join.Inner(joinTable).On(joinTable.Columns("Id").Eq(myTable.Columns("User"))))
             .Where(
-                myTable.Col("Date").Lt(SqlFunction.GetUtcDate()))
+                myTable.Columns("Date").Lt(SqlFunction.GetUtcDate()))
             .OrderBy(
-                myTable.Col("myCol").Desc(),
+                myTable.Columns("myCol").Desc(),
                 Order.By("ID").Asc());
 
         query.Should().HaveSql(

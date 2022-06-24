@@ -14,20 +14,22 @@ public class Can_be_constructed
                 myTable.Column("myCol").As("alt"),
                 "ID"))
             .From(myTable)
-            //.Join(
-            //    Join.Inner(joinTable).On(joinTable.Column("Id").Eq(myTable.Column("User"))))
+            .Join(
+                Join.Inner(joinTable).On(joinTable.Column("Id").Eq(myTable.Column("User"))))
             .Where(
                 myTable.Column("Date").Lt(SqlFunction.GetUtcDate()))
             .OrderBy(
                 myTable.Column("myCol").Desc(),
-                Order.By("ID").Asc());
+                Order.By("ID").Asc())
+            .Offset(15).Fetch(5);
 
         query.Should().HaveSql( ""
             + "SELECT [t].MyCol, [t].myCol AS alt, [t].ID "
             + "FROM [dbo].MyTable [t] "
-            // + "INNER JOIN [sys].User u ON u.Id = [t].User "
             + "WHERE [t].Date < GetUtcDate() "
-            + "ORDER BY [t].myCol DESC, ID ASC");
+            + "INNER JOIN [sys].User u ON u.Id = [t].User "
+            + "ORDER BY [t].myCol DESC, ID ASC "
+            + "OFFSET 15 ROWS FETCH NEXT 5 ROWS ONLY");
     }
 }
 

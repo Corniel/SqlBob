@@ -6,6 +6,18 @@ public abstract class SqlStatements : IReadOnlyCollection<SqlStatement>
 {
     public static readonly SqlStatements None = new Empty();
 
+    [Pure]
+    public static SqlStatements New(SqlStatement? statement)
+        => statement is null
+        ? None
+        : None.Add(statement);
+
+    [Pure]
+    public static SqlStatements New(params SqlStatement[] statements)
+        =>  statements?.Length <= 1
+        ? New(statements?.FirstOrDefault())
+        : None.AddRange(statements!);
+
     private SqlStatements() { }
 
     public abstract int Count { get; }

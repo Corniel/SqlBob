@@ -22,7 +22,7 @@ namespace SqlBob.Specs.TestTools
             var minified = Subject.Minified();
             Execute.Assertion
                 .ForCondition(minified == sql)
-                .FailWith($"Expected '{sql}' but found '{minified}'.");
+                .FailWith($"Expected:\n'{sql}' but found:\n'{minified}'.");
             return new(this);
         }
 

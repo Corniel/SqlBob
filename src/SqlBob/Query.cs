@@ -5,11 +5,11 @@ public sealed class Query : SqlStatement
     internal static readonly Query Empty = new(null, null, null, null, null, null, null);
 
     internal Query(
-        SqlStatements? select, 
+        SqlStatement? select, 
         SqlStatement? from,
         SqlStatements? join,
         SqlStatement? where,
-        SqlStatements? orderBy,
+        SqlStatement? orderBy,
         SqlStatement? offset,
         SqlStatement? fetch)
     {
@@ -22,18 +22,18 @@ public sealed class Query : SqlStatement
         FetchClause = fetch.Optional();
     }
 
-    public SqlStatements SelectClause { get; }
+    public SqlStatement SelectClause { get; }
     public SqlStatement FromClause { get; }
     public SqlStatements JoinClause { get; }
     public SqlStatement WhereClause { get; }
-    public SqlStatements OrderByClause { get; }
+    public SqlStatement OrderByClause { get; }
     public SqlStatement OffsetClause { get; }
     public SqlStatement FetchClause { get; }
 
     [Pure]
     public Query Select(params object[] selections)
         => new(
-        select: SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
+        select: SqlBob.Select.Convert(selections),
         from: FromClause,
         join: JoinClause,
         where: WhereClause,
@@ -81,7 +81,7 @@ public sealed class Query : SqlStatement
         from: FromClause,
         join: JoinClause,
         where: WhereClause,
-        orderBy: SqlStatements.None.AddRange(SQL.ConvertAll(orderBy)),
+        orderBy: SqlBob.OrderBy.Convert(orderBy),
         offset: OffsetClause,
         fetch: FetchClause);
 
@@ -108,38 +108,13 @@ public sealed class Query : SqlStatement
         fetch: Convert(fetch, x => new Fetch(x)));
 
     public override void Write(SqlBuilder builder, int depth)
-    {
-        Guard.NotNull(builder, nameof(builder)).Indent(depth);
-        builder
-            .Indent(depth)
-            .Write(Keyword.SELECT)
-            .Join(
-                ",",
-                (qb, select) => qb.NewLineOrSpace().Indent(depth + 1).Write(select, 0),
-                SelectClause)
-            .NewLineOrSpace()
-            .Indent(depth)
-            .Write(Keyword.FROM)
-            .Space()
-            .Write(FromClause, 0)
-            .NewLineOrSpace();
-
-        foreach(var join in JoinClause)
-        {
-            builder.Write(join, depth);
-        }
-        builder.Write(WhereClause, depth + 1);
-        if (OrderByClause.Any())
-        {
-            builder.Indent(depth)
-                .Write(Keyword.ORDER_BY)
-                .NewLineOrSpace()
-                .Join(
-                    ",",
-                    (qb, statement) => qb.NewLineOrSpace().Write(statement, depth + 1),
-                    OrderByClause
-                );
-        }
-        builder.Write(OffsetClause);
-    }
+        => Guard.NotNull(builder, nameof(builder))
+        .Write(SelectClause, depth)
+        .Write(FromClause, depth)
+        .Write(WhereClause, depth + 1)
+        .Write(JoinClause, depth)
+        .Write(OrderByClause, depth)
+        .Write(OffsetClause, depth)
+        .Write(FetchClause, depth)
+        .NewLineOrSpace();
 }

@@ -52,7 +52,23 @@ public sealed class SqlBuilder
         statement.Write(this, depth);
         return this;
     }
-    
+
+    /// <summary>Writes SQL statements.</summary>
+    /// <param name="statements">
+    /// The SQL statements to write.
+    /// </param>
+    /// <param name="depth"></param>
+    [FluentSyntax]
+    public SqlBuilder Write(IEnumerable<SqlStatement> statements, int depth)
+    {
+        Guard.NotNull(statements, nameof(statements));
+        foreach (var statement in statements)
+        {
+            statement.Write(this, depth);
+        }
+        return this;
+    }
+
     [FluentSyntax]
     public SqlBuilder Write(Alias alias)
     {

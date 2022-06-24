@@ -2,9 +2,9 @@
 
 public sealed class Selection : SqlStatement
 {
-    internal Selection(SqlStatement expression, Alias alias)
+    internal Selection(SqlStatement? expression, Alias alias)
     {
-        Expression = expression;
+        Expression = expression.Required(nameof(expression));
         Alias = alias;
     }
 

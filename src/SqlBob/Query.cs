@@ -2,25 +2,26 @@
 
 public sealed class Query : SqlStatement
 {
+    [Pure]
     public static Query Select(params object[] selections)
         => new(
             select: SqlStatements.None.AddRange(SQL.ConvertAll(selections)),
-            from: SQL.Missing("from statement"),
+            from: null,
             join: SqlStatements.None,
-            where: SQL.None,
+            where: null,
             orderBy: SqlStatements.None);
 
     internal Query(
         SqlStatements select, 
-        SqlStatement from,
+        SqlStatement? from,
         SqlStatements join,
-        SqlStatement where,
+        SqlStatement? where,
         SqlStatements orderBy)
     {
         SelectClause = select;
-        FromClause = from;
+        FromClause = from.Required(nameof(from));
         JoinClause = join;
-        WhereClause = where;
+        WhereClause = where.NotNull();
         OrderByClause = orderBy;
     }
 
@@ -34,7 +35,7 @@ public sealed class Query : SqlStatement
     public Query From(object expression)
         => new(
             select: SelectClause,
-            from: SQL.Convert(expression) ?? SQL.Missing("from statement"),
+            from: SQL.Convert(expression).Required("from"),
             join: JoinClause,
             where: WhereClause, 
             orderBy: OrderByClause);
@@ -54,7 +55,7 @@ public sealed class Query : SqlStatement
             select: SelectClause, 
             from: FromClause, 
             join: JoinClause,
-            where: SQL.Convert(expression) ?? SQL.None,
+            where: expression as Where ?? new Where(SQL.Convert(expression)),
             orderBy: OrderByClause);
 
     [Pure]
@@ -87,15 +88,7 @@ public sealed class Query : SqlStatement
         {
             builder.Write(join, depth);
         }
-        if (WhereClause is not None)
-        {
-            builder
-                .Indent(depth)
-                .Write(Keyword.WHERE)
-                .NewLineOrSpace()
-                .Write(WhereClause, depth + 1)
-                .NewLineOrSpace();
-        }
+        builder.Write(WhereClause, depth + 1);
         if (OrderByClause.Any())
         {
             builder.Indent(depth)

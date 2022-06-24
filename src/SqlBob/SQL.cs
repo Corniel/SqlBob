@@ -2,8 +2,6 @@
 
 public static class SQL
 {
-    public static readonly None None = new();
-
     [Pure]
     public static Parameter Parameter(string? sql) => new(sql);
 
@@ -16,7 +14,7 @@ public static class SQL
 
     [Pure]
     public static Selection Select(object expression) 
-        => new(Convert(expression) ?? Missing("select statement"), Alias.None);
+        => new(Convert(expression).Required("select statement"), Alias.None);
     
     /// <summary>Converts a collection of objects to a collection of SQL statements.</summary>
     [Pure]
@@ -30,7 +28,4 @@ public static class SQL
         => arg is null
         ? null
         : arg as SqlStatement ?? Raw(arg.ToString());
-
-    [Pure]
-    internal static MissingSql Missing(string message) => new(message);
 }

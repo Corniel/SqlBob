@@ -25,22 +25,22 @@ public abstract class SqlStatement
     public virtual SqlStatement Not() => new Negate(this);
 
     [Pure]
-    public Compare Eq(object expression) => new(this, "=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Eq(object expression) => new(this, "=", SQL.Convert(expression).Required("expression"));
     
     [Pure]
-    public Compare Ne(object expression) => new(this, "<>", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Ne(object expression) => new(this, "<>", SQL.Convert(expression).Required("expression"));
 
     [Pure]
-    public Compare Lt(object expression) => new(this, "<", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Lt(object expression) => new(this, "<", SQL.Convert(expression).Required("expression"));
 
     [Pure]
-    public Compare Lte(object expression) => new(this, "<=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Lte(object expression) => new(this, "<=", SQL.Convert(expression).Required("expression"));
     
     [Pure]
-    public Compare Gt(object expression) => new(this, ">", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Gt(object expression) => new(this, ">", SQL.Convert(expression).Required("expression"));
     
     [Pure]
-    public Compare Gte(object expression) => new(this, ">=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    public Compare Gte(object expression) => new(this, ">=", SQL.Convert(expression).Required("expression"));
 
     [Pure]
     public Parenthesis Parenthesis() => this as Parenthesis ?? new(this);

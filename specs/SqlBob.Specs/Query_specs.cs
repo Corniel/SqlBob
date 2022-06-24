@@ -36,5 +36,5 @@ public class Requires
     [Test]
     public void From_clause()
         => Query.Select("*").Should().HaveSyntaxError()
-        .WithMessage("SQL contains a syntax error: SELECT * FROM /* missing from statement */");
+        .WithMessage("SQL contains a syntax error: SELECT * FROM /* missing from */");
 }

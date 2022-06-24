@@ -20,8 +20,8 @@ public abstract class Join : SqlStatement
 
     protected Join(SqlStatement? table, SqlStatement? condition)
     {
-        Table = table ?? SQL.Missing("table");
-        Condition = condition ?? SQL.Missing("condition");
+        Table = table.Required("table");
+        Condition = condition.Required("condition");
     }
 
     protected abstract Keyword JoinType { get; }

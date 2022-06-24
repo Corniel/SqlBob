@@ -2,7 +2,8 @@
 
 public sealed class Order : SqlStatement
 {
-    public static Order By(object expression) => new(SQL.Convert(expression) ?? SQL.Missing("expression"), true);
+    [Pure]
+    public static Order By(object expression) => new(SQL.Convert(expression).Required("expression"), true);
 
     internal Order(SqlStatement expression, bool ascending)
     {
@@ -13,8 +14,10 @@ public sealed class Order : SqlStatement
     public SqlStatement Expression { get; }
     public bool Ascending { get; }
 
+    [Pure]
     public Order Asc() => !Ascending ? new(Expression, true) : this;
-    
+
+    [Pure]
     public Order Desc() => Ascending ? new(Expression, false): this;
 
     public override void Write(SqlBuilder builder, int depth)

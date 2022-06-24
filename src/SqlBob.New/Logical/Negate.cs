@@ -7,6 +7,7 @@ public sealed class Negate : SqlStatement
 
     public SqlStatement Expression { get; }
 
+    [Pure]
     public override SqlStatement Not() => Expression;
 
     /// <inheritdoc/>

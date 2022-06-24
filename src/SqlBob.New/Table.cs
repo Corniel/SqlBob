@@ -14,7 +14,7 @@ public sealed class Table : SqlStatement
     public SqlStatement[] Select(params object[] columns)
         => columns.Select(col => col switch
         {
-            string name => Col(name),
+            string name => Columns(name),
             SqlStatement sql => sql,
             _ => SQL.Raw(col?.ToString())
         })
@@ -26,7 +26,7 @@ public sealed class Table : SqlStatement
 
     public new Table As(Alias alias) => new(Schema, Name, alias);
 
-    public Column Col(string name) => new(this, name);
+    public Column Columns(string name) => new(this, name);
 
     /// <inheritdoc />
     public override void Write(SqlBuilder builder, int depth)

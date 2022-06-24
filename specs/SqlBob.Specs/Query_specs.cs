@@ -9,7 +9,7 @@ public class Can_be_constructed
         var joinTable = Schema.Sys.Table("User").As("u");
 
         var query = SQL.Query
-            .Select(myTable.Select(
+            .Select(myTable.Columns(
                 "MyCol",
                 myTable.Column("myCol").As("alt"),
                 "ID"))

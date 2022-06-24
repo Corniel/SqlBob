@@ -12,7 +12,7 @@ public sealed class Table : SqlStatement
     public Schema Schema { get; }
 
     [Pure]
-    public SqlStatements Select(params object[] columns)
+    public SqlStatements Columns(params object[] columns)
         => SqlStatements.None.AddRange(columns.Select(col => col switch
         {
             string name => Column(name),

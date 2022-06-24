@@ -14,8 +14,8 @@ public class Can_be_constructed
                 myTable.Column("myCol").As("alt"),
                 "ID"))
             .From(myTable)
-            .Join(
-                Join.Inner(joinTable).On(joinTable.Column("Id").Eq(myTable.Column("User"))))
+            //.Join(
+            //    Join.Inner(joinTable).On(joinTable.Column("Id").Eq(myTable.Column("User"))))
             .Where(
                 myTable.Column("Date").Lt(SqlFunction.GetUtcDate()))
             .OrderBy(
@@ -25,7 +25,7 @@ public class Can_be_constructed
         query.Should().HaveSql( ""
             + "SELECT [t].MyCol, [t].myCol AS alt, [t].ID "
             + "FROM [dbo].MyTable [t] "
-            + "INNER JOIN [sys].User u ON u.Id = [t].User "
+            // + "INNER JOIN [sys].User u ON u.Id = [t].User "
             + "WHERE [t].Date < GetUtcDate() "
             + "ORDER BY [t].myCol DESC, ID ASC");
     }

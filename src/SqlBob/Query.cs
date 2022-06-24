@@ -45,7 +45,7 @@ public sealed class Query : SqlStatement
     public Query From(object? from)
         => new(
         select: SelectClause,
-        from: SQL.Convert(from).Required(nameof(from)),
+        from: Convert(from, x => new From(x)),
         join: JoinClause,
         where: WhereClause, 
         orderBy: OrderByClause,

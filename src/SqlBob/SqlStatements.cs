@@ -11,6 +11,9 @@ public abstract class SqlStatements : IReadOnlyCollection<SqlStatement>
     public abstract int Count { get; }
 
     [Pure]
+    public virtual bool Any() => true;
+
+    [Pure]
     public SqlStatements Add(SqlStatement? statement)
         => statement is not null
         ? new Single(this, statement)
@@ -31,6 +34,9 @@ public abstract class SqlStatements : IReadOnlyCollection<SqlStatement>
     private sealed class Empty : SqlStatements
     {
         public override int Count => 0;
+
+        [Pure]
+        public override bool Any() => false;
 
         [Pure]
         public override IEnumerator<SqlStatement> GetEnumerator() => Enumerable.Empty<SqlStatement>().GetEnumerator();

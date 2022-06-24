@@ -9,10 +9,20 @@ internal static class Guarding
         => statement ?? Nill;
 
     [Pure]
+    public static SqlStatements Optional(this SqlStatements? statements)
+        => statements ?? SqlStatements.None;
+
+    [Pure]
+    public static SqlStatements Required(this SqlStatements? statements, string message)
+        => statements is not null && statements.Any()
+        ? statements
+        : SqlStatements.None.Add(new Missing(message));
+
+    [Pure]
     public static SqlStatement Required(this SqlStatement? statement, string message)
-        => statement is not null && statement is not None
-        ? statement
-        : new Missing(message);
+       => statement is not null && statement is not None
+       ? statement
+       : new Missing(message);
 
     private sealed class None : SqlStatement
     {

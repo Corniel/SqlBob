@@ -2,22 +2,22 @@
 
 public sealed class Query : SqlStatement
 {
-    internal static readonly Query Empty = new(SqlStatements.None, null, SqlStatements.None, null, SqlStatements.None, null, null);
+    internal static readonly Query Empty = new(null, null, null, null, null, null, null);
 
     internal Query(
-        SqlStatements select, 
+        SqlStatements? select, 
         SqlStatement? from,
-        SqlStatements join,
+        SqlStatements? join,
         SqlStatement? where,
-        SqlStatements orderBy,
+        SqlStatements? orderBy,
         SqlStatement? offset,
         SqlStatement? fetch)
     {
-        SelectClause = select;
+        SelectClause = select.Required(nameof(select));
         FromClause = from.Required(nameof(from));
-        JoinClause = join;
+        JoinClause = join.Optional();
         WhereClause = where.Optional();
-        OrderByClause = orderBy;
+        OrderByClause = orderBy.Optional();
         OffsetClause = offset.Optional();
         FetchClause = fetch.Optional();
     }
@@ -42,10 +42,10 @@ public sealed class Query : SqlStatement
         fetch: FetchClause);
 
     [Pure]
-    public Query From(object? expression)
+    public Query From(object? from)
         => new(
         select: SelectClause,
-        from: SQL.Convert(expression).Required("from"),
+        from: SQL.Convert(from).Required(nameof(from)),
         join: JoinClause,
         where: WhereClause, 
         orderBy: OrderByClause,
@@ -92,7 +92,7 @@ public sealed class Query : SqlStatement
         from: FromClause,
         join: JoinClause,
         where: WhereClause,
-        orderBy: OrderByClause, // TODO: required
+        orderBy: OrderByClause.Required("orderBy"),
         offset: Convert(offset, x => new Offset(x)),
         fetch: FetchClause);
 
@@ -103,7 +103,7 @@ public sealed class Query : SqlStatement
         from: FromClause,
         join: JoinClause,
         where: WhereClause,
-        orderBy: OrderByClause, // TODO: required
+        orderBy: OrderByClause.Required("orderBy"),
         offset: OffsetClause,
         fetch: Convert(fetch, x => new Fetch(x)));
 

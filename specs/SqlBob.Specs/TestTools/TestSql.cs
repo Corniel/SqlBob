@@ -2,8 +2,8 @@
 
 internal static class TestSql
 {
-    public static SqlStatement None = Query.Select().WhereClause;
-    public static SqlStatement Missing = Query.Select().FromClause;
+    public static SqlStatement None = SQL.Query.Select().WhereClause;
+    public static SqlStatement Missing = SQL.Query.Select().FromClause;
 
     public static Table Table = Schema.Dbo.Table("MyTable").As("t");
     public static Negate Not = (Negate)SQL.Raw("t.Active").Not();

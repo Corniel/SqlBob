@@ -50,9 +50,9 @@ internal class SqlBuilderPool
                 if (index < pool.Length - 1)
                 {
                     pool[++index] = builder;
-                    builder.Clear();
                 }
             }
+            builder.Clear();
         }
     }
 

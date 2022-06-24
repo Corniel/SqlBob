@@ -24,11 +24,22 @@ public abstract class SqlStatement
     [Pure]
     public virtual SqlStatement Not() => new Negate(this);
 
+    [Pure]
     public Compare Eq(object expression) => new(this, "=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    
+    [Pure]
     public Compare Ne(object expression) => new(this, "<>", SQL.Convert(expression) ?? SQL.Missing("expression"));
+
+    [Pure]
     public Compare Lt(object expression) => new(this, "<", SQL.Convert(expression) ?? SQL.Missing("expression"));
+
+    [Pure]
     public Compare Lte(object expression) => new(this, "<=", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    
+    [Pure]
     public Compare Gt(object expression) => new(this, ">", SQL.Convert(expression) ?? SQL.Missing("expression"));
+    
+    [Pure]
     public Compare Gte(object expression) => new(this, ">=", SQL.Convert(expression) ?? SQL.Missing("expression"));
 
     [Pure]
@@ -61,7 +72,10 @@ public abstract class SqlStatement
         return sql;
     }
 
+    [Pure]
+    public sealed override string ToString() => ToString(SqlFormatInfo.Debugger);
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     internal string DebuggerDisplay
-        => $"{{{GetType().Name}}} {ToString(SqlFormatInfo.Debugger)}";
+        => $"{{{GetType().Name}}} {this}";
 }

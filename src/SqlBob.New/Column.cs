@@ -11,7 +11,10 @@ public sealed class Column : SqlStatement
     public Table Table { get; }
     public string Name { get; }
 
+    [Pure]
     public Order Asc() => new(this, true);
+
+    [Pure]
     public Order Desc() => new(this, false);
 
     /// <inheritdoc />

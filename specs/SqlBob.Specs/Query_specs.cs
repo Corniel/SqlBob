@@ -11,23 +11,23 @@ public class Can_be_constructed
         var query = Query
             .Select(myTable.Select(
                 "MyCol",
-                myTable.Columns("myCol").As("alt"),
+                myTable.Column("myCol").As("alt"),
                 "ID"))
             .From(myTable)
             .Join(
-                Join.Inner(joinTable).On(joinTable.Columns("Id").Eq(myTable.Columns("User"))))
+                Join.Inner(joinTable).On(joinTable.Column("Id").Eq(myTable.Column("User"))))
             .Where(
-                myTable.Columns("Date").Lt(SqlFunction.GetUtcDate()))
+                myTable.Column("Date").Lt(SqlFunction.GetUtcDate()))
             .OrderBy(
-                myTable.Columns("myCol").Desc(),
+                myTable.Column("myCol").Desc(),
                 Order.By("ID").Asc());
 
-        query.Should().HaveSql(
-            "SELECT [t].MyCol, [t].myCol AS alt, [t].ID " +
-            "FROM [dbo].MyTable [t] " +
-            "INNER JOIN [sys].User u ON u.Id = [t].User " +
-            "WHERE [t].Date < GetUtcDate() " +
-            "ORDER BY [t].myCol DESC, ID ASC");
+        query.Should().HaveSql( ""
+            + "SELECT [t].MyCol, [t].myCol AS alt, [t].ID "
+            + "FROM [dbo].MyTable [t] "
+            + "INNER JOIN [sys].User u ON u.Id = [t].User "
+            + "WHERE [t].Date < GetUtcDate() "
+            + "ORDER BY [t].myCol DESC, ID ASC");
     }
 }
 

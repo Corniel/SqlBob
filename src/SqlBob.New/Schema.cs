@@ -22,10 +22,11 @@ public readonly struct Schema
     /// <summary>Creates a new instance of a SQL <see cref="Alias"/>.</summary>
     private Schema(string? value) => Value = value == string.Empty ? null : value;
 
+    [Pure]
     public Table Table(string name) => new(this, name, Alias.None);
 
     /// <summary>Implicitly casts a <see cref="string"/> to a SQL <see cref="Alias"/>.</summary>
-    public static explicit operator Schema(string? value) => new(value);
+    public static implicit operator Schema(string? value) => new(value);
 
     /// <summary>True when the alias has been specified.</summary>
     [Pure]

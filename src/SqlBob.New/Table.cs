@@ -11,22 +11,23 @@ public sealed class Table : SqlStatement
 
     public Schema Schema { get; }
 
-    public SqlStatement[] Select(params object[] columns)
-        => columns.Select(col => col switch
+    [Pure]
+    public SqlStatements Select(params object[] columns)
+        => SqlStatements.None.AddRange(columns.Select(col => col switch
         {
-            string name => Columns(name),
+            string name => Column(name),
             SqlStatement sql => sql,
             _ => SQL.Raw(col?.ToString())
-        })
-        .ToArray();
-
+        }));
 
     public string Name { get; }
     public Alias Alias { get; }
 
+    [Pure]
     public new Table As(Alias alias) => new(Schema, Name, alias);
 
-    public Column Columns(string name) => new(this, name);
+    [Pure]
+    public Column Column(string name) => new(this, name);
 
     /// <inheritdoc />
     public override void Write(SqlBuilder builder, int depth)

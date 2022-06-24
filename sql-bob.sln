@@ -11,20 +11,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{770924E8-1E3C-439F-A948-CF3F3252ABDF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{BD81C7D6-C34E-4997-B6A9-FAA9723D39A1}"
 	ProjectSection(SolutionItems) = preProject
 		props\common.props = props\common.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlBob.Tests", "test\SqlBob.Tests\SqlBob.Tests.csproj", "{D11C4900-9181-4D1C-AC34-D38397D7D5BA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlBob", "src\SqlBob\SqlBob.csproj", "{BB9F0ADC-3692-4C98-9C39-C7E39EFE774B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlBob.Specs", "specs\SqlBob.Specs\SqlBob.Specs.csproj", "{8A910582-3F89-417F-A00F-1724A992001B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlBob.New", "src\SqlBob.New\SqlBob.New.csproj", "{3A47AEC9-3A06-4C9B-9610-8DCED313DB09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SqlBob.New\SqlBob.New.csproj" />
+    <ProjectReference Include="..\..\src\SqlBob\SqlBob.csproj" />
   </ItemGroup>
 
 </Project>

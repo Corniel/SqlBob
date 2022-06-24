@@ -2,34 +2,35 @@
 
 public static class SQL
 {
-    [Pure]
-    public static Alias Alias(string alias) => alias;
+    public static readonly None None = new();
 
     [Pure]
-    public static Keyword Keyword(string keyword) => keyword;
+    public static Parameter Parameter(string? sql) => new(sql);
 
     [Pure]
-    public static Literal Literal(string literal) => literal;
+    public static SqlFunction Function(string name, params object[] args)
+        => new(name,SqlStatements.None.AddRange( ConvertAll(args)));
 
     [Pure]
-    public static Parameter Parameter(string parameter) => parameter;
+    public static Raw Raw(string? sql) => new(sql);
 
-
-    /// <summary>Converts an object to a SQL statement.</summary>
     [Pure]
-    internal static T Convert<T>(object arg, Func<object, T> converter) where T : ISqlStatement
-    {
-        if (arg is null || string.Empty.Equals(arg))
-        {
-            return default;
-        }
-        else return (arg is T statement)
-            ? statement
-            : converter(arg);
-    }
+    public static Selection Select(object expression) 
+        => new(Convert(expression) ?? Missing("select statement"), Alias.None);
+    
+    /// <summary>Converts a collection of objects to a collection of SQL statements.</summary>
+    [Pure]
+    internal static IEnumerable<SqlStatement> ConvertAll(params object[] args)
+        => args.Where(arg => arg is { })
+        .Select(arg => arg as SqlStatement ?? Raw(arg.ToString()));
 
     /// <summary>Converts an object to a SQL statement.</summary>
     [Pure]
-    internal static ISqlStatement Convert(object arg)
-        => Convert<ISqlStatement>(arg, (input) => (Literal)input.ToString());
+    internal static SqlStatement? Convert(object? arg) 
+        => arg is null
+        ? null
+        : arg as SqlStatement ?? Raw(arg.ToString());
+
+    [Pure]
+    internal static MissingSql Missing(string message) => new(message);
 }

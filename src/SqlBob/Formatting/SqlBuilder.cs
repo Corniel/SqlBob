@@ -11,14 +11,22 @@ public sealed class SqlBuilder
     public SqlBuilder() : this(null) { }
 
     /// <summary>Creates a new instance of a <see cref="SqlBuilder"/>.</summary>
-    public SqlBuilder(SqlFormatInfo formatInfo) => FormatInfo = formatInfo ?? SqlFormatInfo.Debugger;
+    public SqlBuilder(SqlFormatInfo? formatInfo) => FormatInfo = formatInfo ?? SqlFormatInfo.Debugger;
 
     /// <summary>Gets and sets the format info.</summary>
     public SqlFormatInfo FormatInfo { get; internal set; }
 
     /// <summary>Writes a literal <see cref="string"/>.</summary>
     [FluentSyntax]
-    public SqlBuilder Literal(string value)
+    public SqlBuilder Literal(string? value)
+    {
+        sb.Append(value);
+        return this;
+    }
+
+    /// <summary>Writes a literal <see cref="ch"/>.</summary>
+    [FluentSyntax]
+    public SqlBuilder Literal(char value)
     {
         sb.Append(value);
         return this;
@@ -29,11 +37,40 @@ public sealed class SqlBuilder
     /// The SQL statement to write.
     /// </param>
     /// <param name="depth"></param>
+    [FluentSyntax]
+    public SqlBuilder Write(SqlStatement statement) => Write(statement, 0);
+
+    /// <summary>Writes a SQL statement.</summary>
+    /// <param name="statement">
+    /// The SQL statement to write.
+    /// </param>
+    /// <param name="depth"></param>
     [FluentSyntax] 
-    public SqlBuilder Write(ISqlStatement statement, int depth = 0)
+    public SqlBuilder Write(SqlStatement statement, int depth)
     {
         Guard.NotNull(statement, nameof(statement));
         statement.Write(this, depth);
+        return this;
+    }
+    
+    [FluentSyntax]
+    public SqlBuilder Write(Alias alias)
+    {
+        sb.Append(alias);
+        return this;
+    }
+
+    [FluentSyntax]
+    public SqlBuilder Write(Keyword keyword)
+    {
+        sb.Append(keyword.ToString(FormatInfo));
+        return this;
+    }
+
+    [FluentSyntax]
+    public SqlBuilder Write(Schema schema)
+    {
+        sb.Append(schema);
         return this;
     }
 
@@ -50,20 +87,18 @@ public sealed class SqlBuilder
     /// The statements to join.
     /// </param>
     [FluentSyntax]
-    public SqlBuilder Join(object separator, Action<SqlBuilder, ISqlStatement> write, params ISqlStatement[] statements)
+    public SqlBuilder Join(object separator, Action<SqlBuilder, SqlStatement> write, IEnumerable<SqlStatement> statements)
     {
         Guard.NotNull(statements, nameof(statements));
 
-        // Nothing to join.
-        if (statements.Length == 0)
+        var index = 0;
+        foreach(var statement in statements)
         {
-            return this;
-        }
-        write(this, statements[0]);
-        for (var index = 1; index < statements.Length; index++)
-        {
-            Write(SqlStatement.Convert(separator));
-            write.Invoke(this, statements[index]);
+            if (index++ != 0)
+            {
+                Write(SQL.Convert(separator)!);
+            }
+            write(this, statement);
         }
         return this;
     }
@@ -81,6 +116,10 @@ public sealed class SqlBuilder
         }
         return this;
     }
+
+    /// <summary>Writes a single space.</summary>
+    [FluentSyntax]
+    public SqlBuilder Dot() => Literal(".");
 
     /// <summary>Writes a single space.</summary>
     [FluentSyntax]
@@ -138,7 +177,9 @@ public sealed class SqlBuilder
     {
         if (Throw && HasSyntaxError)
         {
-            throw new SqlSyntaxException(sb.ToString());
+            var error = new SyntaxError($"SQL contains a syntax error: {sb}");
+            Pool.Push(this);
+            throw error;
         }
     }
 

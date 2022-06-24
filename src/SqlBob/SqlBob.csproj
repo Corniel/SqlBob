@@ -1,14 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="..\..\props\common.props" />
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.1</Version>
-    <DefineConstants>CONTRACTS_FULL</DefineConstants>
-    <DebugType>portable</DebugType>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SqlBob</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,26 +11,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="SqlBobMessages.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SqlBobMessages.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="SqlBobMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SqlBobMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="SonarAnalyzer.CSharp" Version="8.40.0.48530">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.40.0.48530">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

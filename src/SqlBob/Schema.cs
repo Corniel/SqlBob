@@ -25,7 +25,7 @@ public readonly struct Schema
     [Pure]
     public Table Table(string name) => new(this, name, Alias.None);
 
-    /// <summary>Implicitly casts a <see cref="string"/> to a SQL <see cref="Alias"/>.</summary>
+    /// <summary>Implicitly casts a <see cref="string"/> to a SQL <see cref="Schema"/>.</summary>
     public static implicit operator Schema(string? value) => new(value);
 
     /// <summary>True when the alias has been specified.</summary>

@@ -6,5 +6,5 @@ public sealed class FullOutherJoin : Join
 
     protected override Keyword JoinType => "FULL OUTHER JOIN";
 
-    public FullOutherJoin On(object condition) => new(Expression, SQL.Convert(condition));
+    public FullOutherJoin On(object condition) => new(Table, SQL.Convert(condition));
 }

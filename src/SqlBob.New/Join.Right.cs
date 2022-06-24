@@ -6,5 +6,5 @@ public sealed class RightJoin : Join
 
     protected override Keyword JoinType => "RIGHT JOIN";
 
-    public RightJoin On(object condition) => new(Expression, SQL.Convert(condition));
+    public RightJoin On(object condition) => new(Table, SQL.Convert(condition));
 }

@@ -6,5 +6,5 @@ public sealed class InnerJoin : Join
 
     protected override Keyword JoinType => "INNER JOIN";
 
-    public InnerJoin On(object condition) => new(Expression, SQL.Convert(condition));
+    public InnerJoin On(object condition) => new(Table, SQL.Convert(condition));
 }

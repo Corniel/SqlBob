@@ -11,7 +11,7 @@ namespace SqlBob.Specs.TestTools
 
         protected override string Identifier => "SqlStatement";
 
-        public ExceptionAssertions<SyntaxError> HasSyntaxError()
+        public ExceptionAssertions<SyntaxError> HaveSyntaxError()
         {
             Func<string> minified = () => Subject.Minified();
             return minified.Should().Throw<SyntaxError>();

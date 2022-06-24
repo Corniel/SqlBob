@@ -6,5 +6,5 @@ public sealed class LeftJoin : Join
 
     protected override Keyword JoinType => "LEFT JOIN";
 
-    public LeftJoin On(object condition) => new(Expression, SQL.Convert(condition));
+    public LeftJoin On(object condition) => new(Table, SQL.Convert(condition));
 }
